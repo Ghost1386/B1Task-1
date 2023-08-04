@@ -86,7 +86,7 @@ public class GeneratorService
 
     private static string GenerateDouble()
     {
-        return $"{GenerateInteger(1, MaxIntegerPartOfNumber)}" + "." +
+        return $"{GenerateInteger(1, MaxIntegerPartOfNumber)}" + "," +
                $"{GenerateInteger(MinFractionalPartOfNumber, MaxFractionalPartOfNumber)}";
     }
 

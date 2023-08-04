@@ -9,12 +9,12 @@ namespace B1Task_1
         {
             try
             {
-                Console.WriteLine("Выберите команду:" +
-                                  "1. Сгенерировать файлы" +
-                                  "2. Обьеденить файлы" +
-                                  "3. Обьеденить файлы с удалением" +
-                                  "4. Импортировать даннные в СУБД" +
-                                  "5. Вычеслить сумму и медиану");
+                Console.WriteLine("Выберите команду:\n" +
+                                  "1. Сгенерировать файлы\n" +
+                                  "2. Обьеденить файлы\n" +
+                                  "3. Обьеденить файлы с удалением\n" +
+                                  "4. Импортировать даннные в СУБД\n" +
+                                  "5. Вычеслить сумму и медиану\n");
                 
                 var result = int.Parse(Console.ReadLine());
 
@@ -35,10 +35,7 @@ namespace B1Task_1
                             Console.ReadLine()));
                         break;
                     case 4:
-                        databaseService.ImportDataFromFiles();
-                        break;
-                    case 5:
-                        databaseService.SumAndMedian();
+                        await databaseService.ImportDataFromFiles();
                         break;
                 }
             }

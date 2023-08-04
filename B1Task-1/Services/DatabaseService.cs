@@ -1,69 +1,39 @@
-﻿using System.Data;
+﻿using B1Task_1.Models;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace B1Task_1.Services;
 
 public class DatabaseService
 {
-    private const string ConnectionStrings = "Server=localhost;Database=B1-1;" +
-                                             "Trusted_Connection=True;TrustServerCertificate=True";
+    private static readonly ApplicationContext applicationContext = new();
 
-    public async void ImportDataFromFiles()
+    public async Task ImportDataFromFiles()
     {
         var fileService = new FileService();
 
         var textInFiles = fileService.GetAllTextInFiles();
-        
-        var sqlExpression = "INSERT INTO Data (Date, English, Russian, Integer, Fractional) VALUES ";
 
-        for (int i = 0; i < textInFiles.Count; i++)
+        for (var i = 0; i < textInFiles.Count / 100; i++)
         {
             var line = textInFiles[i].Split("||");
 
-            sqlExpression += $"('{line[0]}, {line[1]}, {line[2]}, {line[3]}'), ";
+            var data = new Data
+            {
+                Date = line[0],
+                English = line[1],
+                Russian = line[2],
+                Integer = int.Parse(line[3]),
+                Fractional = double.Parse(line[4])
+            };
+        
+            await applicationContext.Data.AddAsync(data);
 
             Console.WriteLine($"Импортированно {i + 1} строк, ещё осталось {textInFiles.Count - 1 - i}");
         }
         
-        Console.WriteLine("Осталось немного...");
-
-        await using (var connection = new SqlConnection(ConnectionStrings))
-        {
-            await connection.OpenAsync();
- 
-            var command = new SqlCommand(sqlExpression, connection);
-
-            await connection.CloseAsync();
-            
-            Console.WriteLine($"Добавлено объектов: {command.ExecuteNonQueryAsync()}");
-        }
-    }
-
-    public async void SumAndMedian()
-    {
-        var sqlExpression = "sp_B1-1";
- 
-        await using (var connection = new SqlConnection(ConnectionStrings))
-        {
-            await connection.OpenAsync();
-                 
-            var command = new SqlCommand(sqlExpression, connection);
-            
-            command.CommandType = CommandType.StoredProcedure;
-            
-            await using (var reader = await command.ExecuteReaderAsync())
-            {
-                if (reader.HasRows)
-                {
-                    while (await reader.ReadAsync())
-                    {
-                        var integer = reader.GetInt32(0);
-                        var fractional = reader.GetDecimal(1);
-                        
-                        Console.WriteLine($"{integer}\n{fractional}");
-                    }
-                }
-            }
-        }
+        await applicationContext.SaveChangesAsync();
+        
+        Console.WriteLine("Все строки импортированны");
     }
 }
