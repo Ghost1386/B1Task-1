@@ -5,7 +5,7 @@ namespace B1Task_1.Services;
 
 public class FileService
 {
-    private const string DefaultPath = "C:/Users/egor5/OneDrive/Рабочий стол/B1Task-1/B1Task-1/B1Task-1/Files/";
+    private const string DefaultPath = "C:/Users/egor5/OneDrive/Рабочий стол/B1-Task1/B1Task-1/Files/";
     private const string TitleForMergeFile = "merged.txt";
     private const int NumberOfFiles = 100;
     private const int NumberOfLines = 100000;
@@ -78,9 +78,9 @@ public class FileService
         return numberOfIterations;
     }
 
-    public List<string> GetAllTextInFiles()
+    public List<string> GetAllTextInFile(int i)
     {
-        var textInFile = File.ReadLines(DefaultPath + TitleForMergeFile).ToList();
+        var textInFile = File.ReadLines(DefaultPath + $"{i}.txt").ToList();
 
         return textInFile;
     }

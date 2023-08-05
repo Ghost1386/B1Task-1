@@ -14,7 +14,7 @@ namespace B1Task_1
                                   "2. Обьеденить файлы\n" +
                                   "3. Обьеденить файлы с удалением\n" +
                                   "4. Импортировать даннные в СУБД\n" +
-                                  "5. Вычеслить сумму и медиану\n");
+                                  "5. Вычеслить сумму всех целых чисел и медиану всех дробных чисел");
                 
                 var result = int.Parse(Console.ReadLine());
 
@@ -36,6 +36,9 @@ namespace B1Task_1
                         break;
                     case 4:
                         await databaseService.ImportDataFromFiles();
+                        break;
+                    case 5:
+                        await databaseService.GetSumAndMedium();
                         break;
                 }
             }
